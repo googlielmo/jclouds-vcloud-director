@@ -18,6 +18,7 @@ package org.jclouds.vcloud.director.v1_5.compute.config;
 
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 import java.net.URI;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -37,6 +38,7 @@ import org.jclouds.vcloud.director.v1_5.compute.functions.ImageStateForStatus;
 import org.jclouds.vcloud.director.v1_5.compute.functions.NodemetadataStatusForStatus;
 import org.jclouds.vcloud.director.v1_5.compute.functions.ValidateVAppTemplateAndReturnEnvelopeOrThrowIllegalArgumentException;
 import org.jclouds.vcloud.director.v1_5.compute.functions.VdcToLocation;
+import org.jclouds.vcloud.director.v1_5.compute.suppliers.VirtualHardwareConfigSupplier;
 import org.jclouds.vcloud.director.v1_5.compute.functions.VmToNodeMetadata;
 import org.jclouds.vcloud.director.v1_5.compute.options.VCloudDirectorTemplateOptions;
 import org.jclouds.vcloud.director.v1_5.compute.strategy.VCloudDirectorComputeServiceAdapter;
@@ -88,13 +90,9 @@ public class VCloudDirectorComputeServiceContextModule extends
       bind(new TypeLiteral<Function<Vdc, Location>>() {
       }).to(VdcToLocation.class);
       bind(TemplateOptions.class).to(VCloudDirectorTemplateOptions.class);
+      bind(new TypeLiteral<Supplier<Set<Hardware>>>() {}).to(VirtualHardwareConfigSupplier.class);
       install(new LocationsFromComputeServiceAdapterModule<Vm, Hardware, VAppTemplate, Vdc>() {
       });
-
-      /*
-      bind(new TypeLiteral<Function<Reference, Location>>() {
-      }).to(Class.class.cast(FindLocationForResource.class));
-      */
    }
 
    @Provides
