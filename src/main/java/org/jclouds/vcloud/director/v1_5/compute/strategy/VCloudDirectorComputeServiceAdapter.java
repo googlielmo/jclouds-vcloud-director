@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
+import static java.lang.String.format;
 import static org.jclouds.util.Predicates2.retry;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.VAPP;
 import static org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType.VAPP_TEMPLATE;
@@ -54,6 +55,7 @@ import org.jclouds.vcloud.director.v1_5.domain.ResourceEntity;
 import org.jclouds.vcloud.director.v1_5.domain.Session;
 import org.jclouds.vcloud.director.v1_5.domain.Task;
 import org.jclouds.vcloud.director.v1_5.domain.VApp;
+import org.jclouds.vcloud.director.v1_5.domain.VAppChildren;
 import org.jclouds.vcloud.director.v1_5.domain.VAppTemplate;
 import org.jclouds.vcloud.director.v1_5.domain.Vdc;
 import org.jclouds.vcloud.director.v1_5.domain.Vm;
@@ -180,7 +182,10 @@ public class VCloudDirectorComputeServiceAdapter implements
             logger.trace("<< vApp(%s) composition completed(%s)", vApp.getId(), vAppReady);
          }
       }
-      Vm vm = Iterables.getOnlyElement(api.getVAppApi().get(vApp.getHref()).getChildren().getVms());
+      URI vAppHref = checkNotNull(vApp.getHref(), format("vApp %s must not have a null href", vApp.getId()));
+      VApp composedVApp = api.getVAppApi().get(vAppHref);
+      VAppChildren children = checkNotNull(composedVApp.getChildren(), format("composedVApp %s must not have null children", composedVApp.getId()));
+      Vm vm = Iterables.getOnlyElement(children.getVms());
 
       if (!vm.getTasks().isEmpty()) {
          for (Task task : vm.getTasks()) {
@@ -398,7 +403,7 @@ public class VCloudDirectorComputeServiceAdapter implements
                                return input.getStatus() == ResourceEntity.Status.POWERED_OFF;
                             }
                          },
-                        new Predicate<VAppTemplate>() {
+                         new Predicate<VAppTemplate>() {
                             @Override
                             public boolean apply(VAppTemplate input) {
                                return input.getTasks().isEmpty();
