@@ -293,8 +293,8 @@ public class VCloudDirectorComputeServiceAdapter implements
       // todo they are only placeholders at the moment
       hardware.add(new HardwareBuilder().ids("micro").hypervisor("lxc").name("micro").processor(new Processor(1, 1)).ram(512).build());
       hardware.add(new HardwareBuilder().ids("small").hypervisor("lxc").name("small").processor(new Processor(1, 1)).ram(1024).build());
-      hardware.add(new HardwareBuilder().ids("medium").hypervisor("lxc").name("medium").processor(new Processor(1, 1)).ram(2048).build());
-      hardware.add(new HardwareBuilder().ids("large").hypervisor("lxc").name("large").processor(new Processor(1, 1)).ram(3072).build());
+      hardware.add(new HardwareBuilder().ids("medium").hypervisor("lxc").name("medium").processor(new Processor(2, 1)).ram(2048).build());
+      hardware.add(new HardwareBuilder().ids("large").hypervisor("lxc").name("large").processor(new Processor(4, 1)).ram(4096).build());
       return hardware;
    }
 
