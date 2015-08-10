@@ -45,6 +45,21 @@ public final class VCloudDirectorConstants {
    /** TODO javadoc */
    public static final String PROPERTY_NS_NAME_LEN_MAX = "jclouds.dns_name_length_max";
 
+   /**
+    * For synthesizing hardware profiles, the maximum number of CPUs.
+    */
+   public static final String PROPERTY_VCLOUD_DIRECTOR_HARDWARE_MAX_CPU = "jclouds.vcloud-director.hardware-profiles.max-cpu";
+
+   /**
+    * For synthesizing hardware profiles, the minimum megabytes of RAM.
+    */
+   public static final String PROPERTY_VCLOUD_DIRECTOR_HARDWARE_MIN_RAM = "jclouds.vcloud-director.hardware-profiles.min-ram";
+
+   /**
+    * For synthesizing hardware profiles, the maximum megabytes of RAM.
+    */
+   public static final String PROPERTY_VCLOUD_DIRECTOR_HARDWARE_MAX_RAM = "jclouds.vcloud-director.hardware-profiles.max-ram";
+
    /** TODO javadoc */
    /*
    public static final TypeToken<RestContext<SessionApi, SessionAsyncApi>> SESSION_CONTEXT_TYPE =

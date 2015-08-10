@@ -28,6 +28,7 @@ import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.jclouds.vcloud.director.v1_5.VCloudDirectorApi;
+import org.jclouds.vcloud.director.v1_5.compute.options.VCloudDirectorTemplateOptions;
 import org.jclouds.vcloud.director.v1_5.domain.Vm;
 import org.jclouds.vcloud.director.v1_5.internal.BaseVCloudDirectorApiLiveTest;
 import org.testng.annotations.AfterGroups;
@@ -66,9 +67,11 @@ public class VCloudDirectorComputeServiceAdapterLiveTest extends BaseVCloudDirec
               .imageNameMatches("CentOS_66_x64_platform") // TAI2.0
               .build();
 
-      template.getOptions()
+      VCloudDirectorTemplateOptions options = template.getOptions().as(VCloudDirectorTemplateOptions.class);
+      options //.memory(1024)
               //.networks("Deployment_Network_01"); // TAI
               .networks("Operational_Network_01"); // TAI2.0
+
       /*
       template.getOptions().runScript("winrm quickconfig -q & " +
               "winrm set winrm/config/service/auth @{Basic=\"true\"} & " +
