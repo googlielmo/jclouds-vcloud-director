@@ -17,6 +17,7 @@
 package org.jclouds.vcloud.director.v1_5.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 import static org.jclouds.util.Predicates2.retry;
@@ -290,7 +291,6 @@ public class VCloudDirectorComputeServiceAdapter implements
       if (!referenceOptional.isPresent()) {
          throw new IllegalStateException("Can't find a network named: " + networkName + "in vDC " + vdc.getName());
       }
-      //return api.getNetworkApi().get(referenceOptional.get().getHref());
       return referenceOptional.get();
    }
 
@@ -391,13 +391,20 @@ public class VCloudDirectorComputeServiceAdapter implements
                        return api.getVAppTemplateApi().get(in.getHref());
                     }
                  })
-                 .filter(Predicates.notNull())
-                 .filter(new Predicate<VAppTemplate>() {
-                    @Override
-                    public boolean apply(VAppTemplate input) {
-                       return input.getTasks().isEmpty();
-                    }
-                 }).toSet());
+                 .filter(and(Predicates.notNull(),
+                         new Predicate<VAppTemplate>() {
+                            @Override
+                            public boolean apply(VAppTemplate input) {
+                               return input.getStatus() == ResourceEntity.Status.POWERED_OFF;
+                            }
+                         },
+                        new Predicate<VAppTemplate>() {
+                            @Override
+                            public boolean apply(VAppTemplate input) {
+                               return input.getTasks().isEmpty();
+                            }
+                         }))
+                         .toSet());
       }
       return vAppTemplates;
    }
@@ -453,7 +460,7 @@ public class VCloudDirectorComputeServiceAdapter implements
    public Iterable<Vdc> listLocations() {
       Org org = getOrgForSession();
       return FluentIterable.from(org.getLinks())
-              .filter(Predicates.and(ReferencePredicates.<Link>typeEquals(VDC)))
+              .filter(and(ReferencePredicates.<Link>typeEquals(VDC)))
               .transform(new Function<Link, Vdc>() {
                  @Override
                  public Vdc apply(Link input) {
