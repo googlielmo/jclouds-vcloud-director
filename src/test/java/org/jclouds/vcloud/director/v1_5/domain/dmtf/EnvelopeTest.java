@@ -44,4 +44,11 @@ public class EnvelopeTest {
       assertNotNull(envelope);
    }
 
+   public void testUnmarshallEnvelopeUpgraded() throws JAXBException {
+      Unmarshaller unmarshaller = jc.createUnmarshaller();
+      unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+      File xml = new File("src/test/resources/dmtf/envelope_upgraded.xml");
+      Envelope envelope = (Envelope) unmarshaller.unmarshal(xml);
+      assertNotNull(envelope);
+   }
 }
