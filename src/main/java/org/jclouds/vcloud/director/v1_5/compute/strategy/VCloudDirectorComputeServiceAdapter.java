@@ -151,7 +151,6 @@ public class VCloudDirectorComputeServiceAdapter implements
       // customize toAddVm
       GuestCustomizationSection guestCustomizationSection = api.getVmApi().getGuestCustomizationSection(toAddVm.getHref());
       guestCustomizationSection = guestCustomizationSection.toBuilder()
-              .adminPasswordAuto(true)
               .resetPasswordRequired(false)
               .build();
 
