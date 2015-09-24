@@ -16,34 +16,16 @@
  */
 package org.jclouds.vcloud.director.v1_5.domain.dmtf;
 
-import com.google.common.collect.Sets;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
-import java.util.Set;
 
 import static org.jclouds.vcloud.director.v1_5.domain.dmtf.DMTFConstants.OVF_NS;
 
-@XmlRootElement(name = "VirtualSystemCollection", namespace = OVF_NS)
-public class VirtualSystemCollection {
-
-    @XmlElement(name = "VirtualSystem", namespace = OVF_NS)
-    private Set<VirtualSystem> virtualSystems = Sets.newLinkedHashSet();
-
+@XmlRootElement(name = "AnnotationSection", namespace = OVF_NS)
+public class AnnotationSection {
     @XmlElement(name = "Info", namespace = OVF_NS)
     private String info;
 
-    @XmlElement(name = "Name", namespace = OVF_NS)
-    private String name;
-
-    @XmlElement(name = "AnnotationSection", namespace = OVF_NS)
-    private List<AnnotationSection> annotationSection;
-
-    @XmlElement(name = "StartupSection", namespace = OVF_NS)
-    private List<StartupSection> startupSections;
-
-    public Set<VirtualSystem> getVirtualSystems() {
-        return virtualSystems;
-    }
+    @XmlElement(name = "Annotation", namespace = OVF_NS)
+    private String annotation;
 }
