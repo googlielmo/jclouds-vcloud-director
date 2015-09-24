@@ -16,8 +16,6 @@
  */
 package org.jclouds.vcloud.director.v1_5.features.admin;
 
-import static org.jclouds.Fallbacks.NullOnNotFoundOr404;
-
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
