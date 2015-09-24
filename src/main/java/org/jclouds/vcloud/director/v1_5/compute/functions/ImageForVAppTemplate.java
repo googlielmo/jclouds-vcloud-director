@@ -32,13 +32,10 @@ import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.domain.Location;
 import org.jclouds.logging.Logger;
-import org.jclouds.vcloud.director.v1_5.VCloudDirectorMediaType;
-import org.jclouds.vcloud.director.v1_5.domain.Link;
 import org.jclouds.vcloud.director.v1_5.domain.ResourceEntity.Status;
 import org.jclouds.vcloud.director.v1_5.domain.VAppTemplate;
 import org.jclouds.vcloud.director.v1_5.domain.dmtf.Envelope;
 import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
-import org.jclouds.vcloud.director.v1_5.predicates.LinkPredicates;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
@@ -81,15 +78,7 @@ public class ImageForVAppTemplate implements Function<VAppTemplate, Image> {
       builder.ids(from.getId());
       builder.uri(from.getHref());
       builder.name(from.getName());
-      Link vdc = Iterables.find(checkNotNull(from, "from").getLinks(), LinkPredicates.typeEquals(VCloudDirectorMediaType.VDC));
-      if (vdc != null) {
-         builder.location(findLocationForResourceInVDC.apply(Iterables.find(from.getLinks(), LinkPredicates.typeEquals(VCloudDirectorMediaType.VDC))));
-      } else {
-         // otherwise, it could be in a public catalog, which is not assigned to a VDC
-      }
-
       builder.description(from.getDescription() != null ? from.getDescription() : from.getName());
-      //builder.operatingSystem(CIMOperatingSystem.toComputeOs(ovf));
       OperatingSystem os;
       if (ovf.getVirtualSystem() != null) {
          os = setOsDetails(ovf.getVirtualSystem().getOperatingSystemSection());
