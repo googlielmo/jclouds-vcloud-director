@@ -11,4 +11,4 @@ In order to release a new version:
 
 If everything is ok, finally push it to Cloudsoft Artifactory:
 
-4. mvn deploy -DaltDeploymentRepository=cloudsoft-deploy-artifactory-release::default::http://ccweb.cloudsoftcorp.com/maven/libs-release-local/ -DskipTests
+4. mvn source:jar javadoc:jar deploy -DaltDeploymentRepository=cloudsoft-deploy-artifactory-release::default::http://ccweb.cloudsoftcorp.com/maven/libs-release-local/ -DskipTests
