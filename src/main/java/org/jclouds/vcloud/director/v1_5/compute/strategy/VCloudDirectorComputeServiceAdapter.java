@@ -231,6 +231,11 @@ public class VCloudDirectorComputeServiceAdapter implements
       boolean vAppPoweredOn = retryTaskSuccess.apply(deployTask);
       logger.trace("<< vApp(%s) to be powered on completed(%s)", vApp.getId(), vAppPoweredOn);
 
+      // Reload the VM; the act of "deploy" can change things like the password in the guest customization
+      composedVApp = api.getVAppApi().get(vAppHref);
+      children = checkNotNull(composedVApp.getChildren(), format("composedVApp %s must not have null children", composedVApp.getId()));
+      vm = Iterables.getOnlyElement(children.getVms());
+
       // Infer the login credentials from the VM, defaulting to "root" user
       LoginCredentials defaultCredentials = VCloudDirectorComputeUtils.getCredentialsFrom(vm);
       LoginCredentials.Builder credsBuilder;
