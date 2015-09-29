@@ -18,20 +18,17 @@ package org.jclouds.vcloud.director.v1_5.compute.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.net.URI;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.collect.Memoized;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.reference.ComputeServiceConstants;
-import org.jclouds.domain.Location;
 import org.jclouds.logging.Logger;
 import org.jclouds.vcloud.director.v1_5.domain.dmtf.Envelope;
 import org.jclouds.vcloud.director.v1_5.domain.query.QueryResultVAppTemplateRecord;
@@ -39,7 +36,6 @@ import org.jclouds.vcloud.director.v1_5.domain.section.OperatingSystemSection;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 
 @Singleton
@@ -57,16 +53,11 @@ public class ImageForVAppTemplate implements Function<QueryResultVAppTemplateRec
 
    private final Function<String, Image.Status> toPortableImageStatus;
    private final Function<URI, Envelope> templateToEnvelope;
-   private final FindLocationForResource findLocationForResourceInVDC;
-   private final Supplier<Set<? extends Location>> locations;
 
    @Inject
-   protected ImageForVAppTemplate(Function<String, Image.Status> toPortableImageStatus, Function<URI, Envelope> templateToEnvelope,
-            FindLocationForResource findLocationForResource, @Memoized Supplier<Set<? extends Location>> locations) {
+   protected ImageForVAppTemplate(Function<String, Image.Status> toPortableImageStatus, Function<URI, Envelope> templateToEnvelope) {
       this.toPortableImageStatus = checkNotNull(toPortableImageStatus, "toPortableImageStatus");
       this.templateToEnvelope = checkNotNull(templateToEnvelope, "templateToEnvelope");
-      this.findLocationForResourceInVDC = checkNotNull(findLocationForResource, "findLocationForResourceInVDC");
-      this.locations = checkNotNull(locations, "locations");
    }
 
    @Override
@@ -78,7 +69,7 @@ public class ImageForVAppTemplate implements Function<QueryResultVAppTemplateRec
       builder.ids(getVappId(from));
       builder.uri(from.getHref());
       builder.name(from.getName());
-      builder.description(from.getName()+"_"+from.getCatalogName());
+      builder.description(String.format("%s_%s", from.getName(), from.getCatalogName()));
       OperatingSystem os;
       if (ovf.getVirtualSystem() != null) {
          os = setOsDetails(ovf.getVirtualSystem().getOperatingSystemSection());
